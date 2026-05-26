@@ -1,5 +1,5 @@
 import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from "@scure/bip39";
-import { wordlist } from "@scure/bip39/wordlists/english";
+import { wordlist } from "@scure/bip39/wordlists/english.js";
 import { HDKey } from "@scure/bip32";
 import { privateKeyToAccount } from "viem/accounts";
 import type { Address } from "viem";
@@ -19,7 +19,7 @@ export function mnemonicToAccount(mnemonic: string): { address: Address; private
   const seed = mnemonicToSeedSync(mnemonic.trim());
   const hd = HDKey.fromMasterSeed(seed).derive(EVM_PATH);
   if (!hd.privateKey) throw new Error("Failed to derive key");
-  const pk = `0x${Buffer.from(hd.privateKey).toString("hex")}` as `0x${string}`;
+  const pk = `0x${Array.from(hd.privateKey).map((b) => b.toString(16).padStart(2, "0")).join("")}` as `0x${string}`;
   const account = privateKeyToAccount(pk);
   return { address: account.address, privateKey: pk };
 }
@@ -29,9 +29,9 @@ const enc = new TextEncoder();
 const dec = new TextDecoder();
 
 async function deriveKey(passcode: string, salt: Uint8Array) {
-  const baseKey = await crypto.subtle.importKey("raw", enc.encode(passcode), "PBKDF2", false, ["deriveKey"]);
+  const baseKey = await crypto.subtle.importKey("raw", enc.encode(passcode) as BufferSource, "PBKDF2", false, ["deriveKey"]);
   return crypto.subtle.deriveKey(
-    { name: "PBKDF2", salt, iterations: 250_000, hash: "SHA-256" },
+    { name: "PBKDF2", salt: salt as BufferSource, iterations: 250_000, hash: "SHA-256" },
     baseKey,
     { name: "AES-GCM", length: 256 },
     false,
@@ -54,14 +54,14 @@ export async function encryptSecret(plain: string, passcode: string): Promise<st
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const key = await deriveKey(passcode, salt);
-  const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(plain));
+  const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv: iv as BufferSource }, key, enc.encode(plain) as BufferSource);
   return JSON.stringify({ s: b64(salt), i: b64(iv), c: b64(ct) });
 }
 
 export async function decryptSecret(payload: string, passcode: string): Promise<string> {
   const { s, i, c } = JSON.parse(payload);
   const key = await deriveKey(passcode, unb64(s));
-  const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(i) }, key, unb64(c));
+  const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(i) as BufferSource }, key, unb64(c) as BufferSource);
   return dec.decode(pt);
 }
 
