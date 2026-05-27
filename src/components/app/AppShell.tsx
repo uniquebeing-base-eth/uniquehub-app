@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useRouter } from "@tanstack/react-router";
 import { Logo } from "@/components/site/Logo";
-import { LayoutDashboard, Lock, Sparkles, Target, ArrowLeftRight, Store, Settings, Shield, LogOut } from "lucide-react";
+import { LayoutDashboard, Lock, Sparkles, Target, ArrowLeftRight, Settings, Shield, LogOut } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 
@@ -10,7 +10,6 @@ const nav = [
   { to: "/earn", label: "Earn", icon: Sparkles },
   { to: "/goals", label: "Save to Get", icon: Target },
   { to: "/spend", label: "Spend", icon: ArrowLeftRight },
-  { to: "/merchant", label: "Merchant", icon: Store },
   { to: "/settings", label: "Settings", icon: Settings },
   { to: "/security", label: "Security", icon: Shield },
 ] as const;
