@@ -16,7 +16,6 @@ import { Route as AuthenticatedSpendRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSecurityRouteImport } from './routes/_authenticated/security'
 import { Route as AuthenticatedSaveRouteImport } from './routes/_authenticated/save'
-import { Route as AuthenticatedMerchantRouteImport } from './routes/_authenticated/merchant'
 import { Route as AuthenticatedGoalsRouteImport } from './routes/_authenticated/goals'
 import { Route as AuthenticatedEarnRouteImport } from './routes/_authenticated/earn'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -55,11 +54,6 @@ const AuthenticatedSaveRoute = AuthenticatedSaveRouteImport.update({
   path: '/save',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedMerchantRoute = AuthenticatedMerchantRouteImport.update({
-  id: '/merchant',
-  path: '/merchant',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
 const AuthenticatedGoalsRoute = AuthenticatedGoalsRouteImport.update({
   id: '/goals',
   path: '/goals',
@@ -82,7 +76,6 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/earn': typeof AuthenticatedEarnRoute
   '/goals': typeof AuthenticatedGoalsRoute
-  '/merchant': typeof AuthenticatedMerchantRoute
   '/save': typeof AuthenticatedSaveRoute
   '/security': typeof AuthenticatedSecurityRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -94,7 +87,6 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/earn': typeof AuthenticatedEarnRoute
   '/goals': typeof AuthenticatedGoalsRoute
-  '/merchant': typeof AuthenticatedMerchantRoute
   '/save': typeof AuthenticatedSaveRoute
   '/security': typeof AuthenticatedSecurityRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -108,7 +100,6 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/earn': typeof AuthenticatedEarnRoute
   '/_authenticated/goals': typeof AuthenticatedGoalsRoute
-  '/_authenticated/merchant': typeof AuthenticatedMerchantRoute
   '/_authenticated/save': typeof AuthenticatedSaveRoute
   '/_authenticated/security': typeof AuthenticatedSecurityRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
@@ -122,7 +113,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/earn'
     | '/goals'
-    | '/merchant'
     | '/save'
     | '/security'
     | '/settings'
@@ -134,7 +124,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/earn'
     | '/goals'
-    | '/merchant'
     | '/save'
     | '/security'
     | '/settings'
@@ -147,7 +136,6 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/earn'
     | '/_authenticated/goals'
-    | '/_authenticated/merchant'
     | '/_authenticated/save'
     | '/_authenticated/security'
     | '/_authenticated/settings'
@@ -211,13 +199,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSaveRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/merchant': {
-      id: '/_authenticated/merchant'
-      path: '/merchant'
-      fullPath: '/merchant'
-      preLoaderRoute: typeof AuthenticatedMerchantRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/goals': {
       id: '/_authenticated/goals'
       path: '/goals'
@@ -246,7 +227,6 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEarnRoute: typeof AuthenticatedEarnRoute
   AuthenticatedGoalsRoute: typeof AuthenticatedGoalsRoute
-  AuthenticatedMerchantRoute: typeof AuthenticatedMerchantRoute
   AuthenticatedSaveRoute: typeof AuthenticatedSaveRoute
   AuthenticatedSecurityRoute: typeof AuthenticatedSecurityRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
@@ -257,7 +237,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEarnRoute: AuthenticatedEarnRoute,
   AuthenticatedGoalsRoute: AuthenticatedGoalsRoute,
-  AuthenticatedMerchantRoute: AuthenticatedMerchantRoute,
   AuthenticatedSaveRoute: AuthenticatedSaveRoute,
   AuthenticatedSecurityRoute: AuthenticatedSecurityRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
@@ -276,3 +255,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

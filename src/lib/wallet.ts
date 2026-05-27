@@ -91,3 +91,11 @@ export function clearLocalWallet() {
 export function shortAddr(addr: string): string {
   return `${addr.slice(0, 6)}…${addr.slice(-4)}`;
 }
+
+export async function unlockWallet(passcode: string): Promise<{ mnemonic: string; privateKey: `0x${string}`; address: `0x${string}` }> {
+  const w = loadLocalWallet();
+  if (!w) throw new Error("No wallet on this device");
+  const mnemonic = await decryptSecret(w.encryptedMnemonic, passcode);
+  const { address, privateKey } = mnemonicToAccount(mnemonic);
+  return { mnemonic, privateKey, address };
+}
