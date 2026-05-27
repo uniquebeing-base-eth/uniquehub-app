@@ -1,17 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Lock, Sparkles, Target, ShieldCheck, Store, Zap } from "lucide-react";
-import { SiteHeader } from "@/components/site/SiteHeader";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { Button } from "@/components/ui/button";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "UniqueHub — Save. Earn. Spend. Stablecoins reimagined." },
-      { name: "description", content: "Grow your money with stablecoins, smart savings vaults, and trusted DeFi infrastructure. Non-custodial. Mobile-first." },
-    ],
-  }),
-  component: Landing,
+  beforeLoad: async () => {
+    if (typeof window === "undefined") return;
+    const { data } = await supabase.auth.getSession();
+    if (data.session) throw redirect({ to: "/dashboard" });
+    throw redirect({ to: "/login" });
+  },
+  component: () => null,
 });
 
 function Landing() {
