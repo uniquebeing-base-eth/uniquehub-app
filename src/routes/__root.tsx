@@ -79,7 +79,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "UniqueHub — Save. Earn. Spend. Stablecoins reimagined." },
       { name: "description", content: "UniqueHub is a non-custodial financial OS for stablecoin savings, DeFi yield, goal-based commerce, and merchant settlement." },
       { name: "author", content: "UniqueHub" },
-      { name: "theme-color", content: "#0b1020" },
+      { name: "theme-color", content: "#1a3a8f" },
       { property: "og:title", content: "UniqueHub — Save. Earn. Spend." },
       { property: "og:description", content: "Grow your money with stablecoins, smart savings vaults, and trusted DeFi infrastructure." },
       { property: "og:type", content: "website" },
@@ -91,6 +91,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "icon", type: "image/png", href: "/logo.png" },
+      { rel: "apple-touch-icon", href: "/logo.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
       {
