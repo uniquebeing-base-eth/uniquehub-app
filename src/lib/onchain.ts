@@ -31,6 +31,28 @@ export function accountFromPk(pk: Hex) {
   return privateKeyToAccount(pk);
 }
 
+export async function waitForTx(chainId: number, hash: Hex) {
+  const c = publicClientFor(chainId);
+  return c.waitForTransactionReceipt({ hash });
+}
+
+export async function getAllowance(chainId: number, token: Address, owner: Address, spender: Address): Promise<bigint> {
+  const c = publicClientFor(chainId);
+  return c.readContract({ address: token, abi: erc20Abi, functionName: "allowance", args: [owner, spender] }) as Promise<bigint>;
+}
+
+export async function approveErc20(chainId: number, pk: Hex, token: Address, spender: Address, amount: string, decimals: number): Promise<Hex> {
+  const account = accountFromPk(pk);
+  const wallet = createWalletClient({ account, transport: http(rpcFor(chainId)) });
+  return wallet.writeContract({
+    address: token,
+    abi: erc20Abi,
+    functionName: "approve",
+    args: [spender, parseUnits(amount, decimals)],
+    chain: null,
+  });
+}
+
 export async function sendNative(chainId: number, pk: Hex, to: Address, amountEth: string): Promise<Hex> {
   const account = accountFromPk(pk);
   const wallet = createWalletClient({ account, transport: http(rpcFor(chainId)) });
