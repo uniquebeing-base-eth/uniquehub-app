@@ -14,42 +14,150 @@ export type Database = {
   }
   public: {
     Tables: {
+      clerk_links: {
+        Row: {
+          clerk_user_id: string
+          created_at: string
+          email: string | null
+          user_id: string
+        }
+        Insert: {
+          clerk_user_id: string
+          created_at?: string
+          email?: string | null
+          user_id?: string
+        }
+        Update: {
+          clerk_user_id?: string
+          created_at?: string
+          email?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      deposit_intents: {
+        Row: {
+          amount: number
+          bridge_tx_hash: string | null
+          bridging_at: string | null
+          completed_at: string | null
+          created_at: string
+          deposit_address: string | null
+          dest_address: string
+          dest_tx_hash: string | null
+          detected_at: string | null
+          failure_reason: string | null
+          from_chain_id: number
+          from_token: string
+          goal_id: string | null
+          id: string
+          squid_request_id: string | null
+          squid_route: Json | null
+          src_tx_hash: string | null
+          status: Database["public"]["Enums"]["deposit_intent_status"]
+          to_chain_id: number
+          to_token: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          bridge_tx_hash?: string | null
+          bridging_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+          deposit_address?: string | null
+          dest_address: string
+          dest_tx_hash?: string | null
+          detected_at?: string | null
+          failure_reason?: string | null
+          from_chain_id: number
+          from_token: string
+          goal_id?: string | null
+          id?: string
+          squid_request_id?: string | null
+          squid_route?: Json | null
+          src_tx_hash?: string | null
+          status?: Database["public"]["Enums"]["deposit_intent_status"]
+          to_chain_id?: number
+          to_token?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          bridge_tx_hash?: string | null
+          bridging_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+          deposit_address?: string | null
+          dest_address?: string
+          dest_tx_hash?: string | null
+          detected_at?: string | null
+          failure_reason?: string | null
+          from_chain_id?: number
+          from_token?: string
+          goal_id?: string | null
+          id?: string
+          squid_request_id?: string | null
+          squid_route?: Json | null
+          src_tx_hash?: string | null
+          status?: Database["public"]["Enums"]["deposit_intent_status"]
+          to_chain_id?: number
+          to_token?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
+          category: string | null
           created_at: string
           current_amount: number
           deadline: string | null
+          frequency: string
           id: string
           merchant_id: string | null
+          merchant_product_ref: string | null
           status: Database["public"]["Enums"]["goal_status"]
           target_amount: number
           title: string
           token: string
           user_id: string
+          vault_address: string | null
         }
         Insert: {
+          category?: string | null
           created_at?: string
           current_amount?: number
           deadline?: string | null
+          frequency?: string
           id?: string
           merchant_id?: string | null
+          merchant_product_ref?: string | null
           status?: Database["public"]["Enums"]["goal_status"]
           target_amount: number
           title: string
           token?: string
           user_id: string
+          vault_address?: string | null
         }
         Update: {
+          category?: string | null
           created_at?: string
           current_amount?: number
           deadline?: string | null
+          frequency?: string
           id?: string
           merchant_id?: string | null
+          merchant_product_ref?: string | null
           status?: Database["public"]["Enums"]["goal_status"]
           target_amount?: number
           title?: string
           token?: string
           user_id?: string
+          vault_address?: string | null
         }
         Relationships: [
           {
@@ -60,6 +168,21 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      legacy_users: {
+        Row: {
+          email: string | null
+          id: string
+        }
+        Insert: {
+          email?: string | null
+          id: string
+        }
+        Update: {
+          email?: string | null
+          id?: string
+        }
+        Relationships: []
       }
       locks: {
         Row: {
@@ -133,6 +256,39 @@ export type Database = {
           owner_user_id?: string
           settlement_address?: string
           verification_status?: Database["public"]["Enums"]["verification_status"]
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          kind: string
+          read: boolean
+          ref_id: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          read?: boolean
+          ref_id?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          read?: boolean
+          ref_id?: string | null
+          title?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -246,6 +402,69 @@ export type Database = {
         }
         Relationships: []
       }
+      transactions: {
+        Row: {
+          amount: number
+          chain_id: number | null
+          counterparty: string | null
+          created_at: string
+          description: string | null
+          dest_tx_hash: string | null
+          from_chain_id: number | null
+          id: string
+          metadata: Json
+          ref_id: string | null
+          src_tx_hash: string | null
+          status: Database["public"]["Enums"]["transaction_status"]
+          to_chain_id: number | null
+          token: string
+          tx_hash: string | null
+          type: Database["public"]["Enums"]["transaction_type"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          chain_id?: number | null
+          counterparty?: string | null
+          created_at?: string
+          description?: string | null
+          dest_tx_hash?: string | null
+          from_chain_id?: number | null
+          id?: string
+          metadata?: Json
+          ref_id?: string | null
+          src_tx_hash?: string | null
+          status?: Database["public"]["Enums"]["transaction_status"]
+          to_chain_id?: number | null
+          token?: string
+          tx_hash?: string | null
+          type: Database["public"]["Enums"]["transaction_type"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          chain_id?: number | null
+          counterparty?: string | null
+          created_at?: string
+          description?: string | null
+          dest_tx_hash?: string | null
+          from_chain_id?: number | null
+          id?: string
+          metadata?: Json
+          ref_id?: string | null
+          src_tx_hash?: string | null
+          status?: Database["public"]["Enums"]["transaction_status"]
+          to_chain_id?: number | null
+          token?: string
+          tx_hash?: string | null
+          type?: Database["public"]["Enums"]["transaction_type"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -312,9 +531,24 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "merchant" | "user"
+      deposit_intent_status:
+        | "pending"
+        | "detected"
+        | "bridging"
+        | "completed"
+        | "failed"
       goal_status: "active" | "completed" | "refunded" | "cancelled"
       lock_status: "active" | "matured" | "withdrawn" | "early_exit"
       payment_status: "pending" | "confirmed" | "failed"
+      transaction_status: "pending" | "processing" | "completed" | "failed"
+      transaction_type:
+        | "deposit"
+        | "transfer"
+        | "withdrawal"
+        | "bridge"
+        | "vault_deposit"
+        | "goal_funding"
+        | "yield"
       verification_status: "pending" | "verified" | "rejected"
     }
     CompositeTypes: {
@@ -444,9 +678,26 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "merchant", "user"],
+      deposit_intent_status: [
+        "pending",
+        "detected",
+        "bridging",
+        "completed",
+        "failed",
+      ],
       goal_status: ["active", "completed", "refunded", "cancelled"],
       lock_status: ["active", "matured", "withdrawn", "early_exit"],
       payment_status: ["pending", "confirmed", "failed"],
+      transaction_status: ["pending", "processing", "completed", "failed"],
+      transaction_type: [
+        "deposit",
+        "transfer",
+        "withdrawal",
+        "bridge",
+        "vault_deposit",
+        "goal_funding",
+        "yield",
+      ],
       verification_status: ["pending", "verified", "rejected"],
     },
   },
